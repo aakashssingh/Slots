@@ -1,6 +1,16 @@
+#how much money is deposited
+#how much do they wanna bet
+#how many lines do they wanna bet on (max 5?)
+#diff symbol combos will have different multipliers
+#randomize rolls for each wheel
+#avoid the same symbol being selected in the same wheel
+#display results of winnings and which lines they won on 
+#ask if the the player wants to continue playing 
+
+
 import random
 
-max_lines = 3
+max_lines = 5
 max_bet = 100
 min_bet = 1
 
@@ -8,13 +18,15 @@ rows = 3
 col = 3
 
 symbol_count = {
-    "A": 2,
-    "B": 4,
-    "C": 6,
-    "D": 8
+    "$": 2,
+    "A": 6,
+    "B": 9,
+    "C": 12,
+    "D": 15
 }
 
 symbol_value = {
+    "$": 10
     "A": 5,
     "B": 4,
     "C": 3,
@@ -22,22 +34,55 @@ symbol_value = {
 }
 
 
-def check_winnings(columns, lines, bet, values):
-    winnings = 0
-    winning_lines = []
-    for line in range(lines):
-        symbol = columns[0][line]
-        for column in columns:
-            symbol_to_check = column[line]
-            if symbol != symbol_to_check:
+
+def deposit():
+    while True:
+        amount = input("How much money would you like to deposit? $")
+        if amount.isdigit():
+            amount = int(amount)
+            if amount > 0:
                 break
+            else:
+                print("Amount must be greater than 0.")
         else:
-            winnings += values[symbol] * bet
-            winning_lines.append(line + 1)
+            print("Please enter a number.")
 
-    return winnings, winning_lines
+    return amount
+    
+
+def get_bet():
+    while True:
+        amount = input("What would you like to bet on each line? $")
+        if amount.isdigit():
+            amount = int(amount)
+            if min_bet <= amount <= max_bet:
+                break
+            else:
+                print(f"Amount must be between ${min_bet} - ${max_bet}.")
+        else:
+            print("Please enter a number.")
+
+    return amount
 
 
+    
+def get_number_of_lines():
+    while True:
+        lines = input(
+            "Enter the number of lines to bet on (1-" + str(max_lines) + ")? ")
+        if lines.isdigit():
+            lines = int(lines)
+            if 1 <= lines <= max_lines:
+                break
+            else:
+                print("Enter a valid number of lines.")
+        else:
+            print("Please enter a number.")
+
+    return lines
+
+
+    
 def get_slot_machine_spin(rows, cols, symbols):
     all_symbols = []
     for symbol, symbol_count in symbols.items():
@@ -57,7 +102,6 @@ def get_slot_machine_spin(rows, cols, symbols):
 
     return columns
 
-
 def print_slot_machine(columns):
     for row in range(len(columns[0])):
         for i, column in enumerate(columns):
@@ -67,52 +111,6 @@ def print_slot_machine(columns):
                 print(column[row], end="")
 
         print()
-
-
-def deposit():
-    while True:
-        amount = input("How much money would you like to deposit? $")
-        if amount.isdigit():
-            amount = int(amount)
-            if amount > 0:
-                break
-            else:
-                print("Amount must be greater than 0.")
-        else:
-            print("Please enter a number.")
-
-    return amount
-
-
-def get_number_of_lines():
-    while True:
-        lines = input(
-            "Enter the number of lines to bet on (1-" + str(max_lines) + ")? ")
-        if lines.isdigit():
-            lines = int(lines)
-            if 1 <= lines <= max_lines:
-                break
-            else:
-                print("Enter a valid number of lines.")
-        else:
-            print("Please enter a number.")
-
-    return lines
-
-
-def get_bet():
-    while True:
-        amount = input("What would you like to bet on each line? $")
-        if amount.isdigit():
-            amount = int(amount)
-            if min_bet <= amount <= max_bet:
-                break
-            else:
-                print(f"Amount must be between ${min_bet} - ${max_bet}.")
-        else:
-            print("Please enter a number.")
-
-    return amount
 
 
 def spin(balance):
@@ -136,6 +134,22 @@ def spin(balance):
     print(f"You won ${winnings}.")
     print(f"You won on lines:", *winning_lines)
     return winnings - total_bet
+
+def check_winnings(columns, lines, bet, values):
+    winnings = 0
+    winning_lines = []
+    for line in range(lines):
+        symbol = columns[0][line]
+        for column in columns:
+            symbol_to_check = column[line]
+            if symbol != symbol_to_check:
+                break
+        else:
+            winnings += values[symbol] * bet
+            winning_lines.append(line + 1)
+
+    return winnings, winning_lines
+
 
 
 def main():
