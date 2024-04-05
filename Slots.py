@@ -3,14 +3,13 @@
 #how many lines do they wanna bet on (max 5?)
 #diff symbol combos will have different multipliers
 #randomize rolls for each wheel
-#avoid the same symbol being selected in the same wheel
 #display results of winnings and which lines they won on 
 #ask if the the player wants to continue playing 
 
 
 import random
 
-max_lines = 5
+max_lines = 3
 max_bet = 100
 min_bet = 1
 
@@ -18,15 +17,15 @@ rows = 3
 col = 3
 
 symbol_count = {
-    "$": 2,
-    "A": 6,
-    "B": 9,
-    "C": 12,
-    "D": 15
+    "$": 1,
+    "A": 3,
+    "B": 5,
+    "C": 7,
+    "D": 9
 }
 
 symbol_value = {
-    "$": 10
+    "$": 100,
     "A": 5,
     "B": 4,
     "C": 3,
@@ -34,21 +33,19 @@ symbol_value = {
 }
 
 
-
 def deposit():
-    while True:
         amount = input("How much money would you like to deposit? $")
         if amount.isdigit():
             amount = int(amount)
-            if amount > 0:
-                break
+            while amount > 0:
+                 break
             else:
-                print("Amount must be greater than 0.")
+                 print("Amount must be greater than 0.")
         else:
             print("Please enter a number.")
 
-    return amount
-    
+        return amount
+
 
 def get_bet():
     while True:
@@ -63,7 +60,6 @@ def get_bet():
             print("Please enter a number.")
 
     return amount
-
 
     
 def get_number_of_lines():
@@ -80,7 +76,6 @@ def get_number_of_lines():
             print("Please enter a number.")
 
     return lines
-
 
     
 def get_slot_machine_spin(rows, cols, symbols):
